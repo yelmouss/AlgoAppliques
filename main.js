@@ -36,47 +36,51 @@ const graph = {
 // Voici une fonction simplifiée de Dijkstra en JavaScript qui prend notre graphique et le sommet de départ pour calculer les distances minimales :
 
 function dijkstra(graph, start) {
+    // Crée un objet 'distances' pour stocker la distance la plus courte de 'start' à chaque nœud
     const distances = {};
+    // Crée un ensemble 'visited' pour suivre les nœuds qui ont été visités et traités
     const visited = new Set();
 
-    // Initialiser toutes les distances à l'infini sauf pour le point de départ
+    // Initialise les distances de tous les nœuds à 'Infinity' sauf le nœud de départ 'start'
     for (let node in graph) {
         distances[node] = Infinity;
     }
-    distances[start] = 0;
+    distances[start] = 0; // La distance du nœud de départ à lui-même est toujours 0
 
-    // Explorer le graph
+    // Commence à explorer le graphe à partir du nœud de départ
     let current = start;
-    while (current) {
-        let dist = distances[current];
-        let neighbors = graph[current];
+    while (current) { // Continue tant qu'il y a un nœud 'current' à traiter
+        let dist = distances[current]; // Distance actuelle du nœud de départ à 'current'
+        let neighbors = graph[current]; // Objets contenant les voisins de 'current' et leurs poids
 
-        // Mise à jour des distances pour les voisins
+        // Boucle sur chaque voisin de 'current'
         for (let neighbor in neighbors) {
-            if (!visited.has(neighbor)) {
-                let newDist = dist + neighbors[neighbor];
-                if (newDist < distances[neighbor]) {
-                    distances[neighbor] = newDist;
+            if (!visited.has(neighbor)) { // Si le voisin n'a pas encore été visité
+                let newDist = dist + neighbors[neighbor]; // Calcule la nouvelle distance pour le voisin
+                if (newDist < distances[neighbor]) { // Si la nouvelle distance est plus courte
+                    distances[neighbor] = newDist; // Met à jour la distance dans l'objet 'distances'
                 }
             }
         }
 
-        // Marquer le courant comme visité
+        // Ajoute 'current' à l'ensemble des nœuds visités
         visited.add(current);
 
-        // Trouver le prochain point à visiter
+        // Prépare à traiter le prochain nœud
         current = null;
         let smallest = Infinity;
+        // Trouve le nœud non visité avec la plus petite distance enregistrée
         for (let node in distances) {
             if (!visited.has(node) && distances[node] < smallest) {
                 smallest = distances[node];
-                current = node;
+                current = node; // 'current' est maintenant le nœud avec la plus petite distance
             }
         }
     }
-
+    // Retourne l'objet 'distances' qui contient la distance minimale de 'start' à chaque nœud
     return distances;
 }
+
 // Comment utiliser cette fonction
 // Vous utilisez cette fonction en lui donnant le graphe et en indiquant par où commencer. Par exemple, 
 // dijkstra(graph, 'A') vous donnera les distances les plus courtes de A à tous les autres points.
